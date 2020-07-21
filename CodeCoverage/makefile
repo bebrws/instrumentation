@@ -1,15 +1,8 @@
-CONFIG_ROOT := $(PIN_ROOT)/source/tools/Config
-include $(CONFIG_ROOT)/makefile.config
+all: CodeCoverage.a
 
-TOOL_ROOTS := CodeCoverage
-TOOL_CXXFLAGS += -std=c++11 -Wno-format -I ../common
+#assuming pin has been downloaded to $HOME/pin-3.15
 
-# Newer GCC's need this flag to compile.
-ifeq ($(TARGET_OS),linux)
-    TOOL_CXXFLAGS += -faligned-new
-endif
 
-$(OBJDIR)CodeCoverage$(PINTOOL_SUFFIX): $(OBJDIR)CodeCoverage$(OBJ_SUFFIX) ../common/$(OBJDIR)ImageManager$(OBJ_SUFFIX)
-	$(LINKER) $(TOOL_LDFLAGS) $(LINK_EXE)$@ $^ $(TOOL_LPATHS) $(TOOL_LIBS)
-
-include $(TOOLS_ROOT)/Config/makefile.default.rules
+CodeCoverage.dylib: CodeCoverage.cpp ../common/ImageManager.cpp ImageManager.h
+	c++ -Wall -Werror -Wno-unknown-pragmas -D__PIN__=1 -DPIN_CRT=1 -fno-stack-protector -fno-exceptions -funwind-tables -fno-rtti -Wtypedef-redefinition -DTARGET_IA32E -DHOST_IA32E -fPIC -DTARGET_MAC -D__DARWIN_ONLY_UNIX_CONFORMANCE=1 -D__DARWIN_UNIX03=0  -I $HOME/pin-3.15/source/include/pin/  -I$HOME/pin-3.15/source/include/pin -I$HOME/pin-3.15/source/include/pin/gen -isystem /Users/bbarrows/pin-3.15/extras/stlport/include -isystem /Users/bbarrows/pin-3.15/extras/libstdc++/include -isystem /Users/bbarrows/pin-3.15/extras/crt/include -isystem /Users/bbarrows/pin-3.15/extras/crt/include/arch-x86_64 -isystem /Users/bbarrows/pin-3.15/extras/crt/include/kernel/uapi -isystem /Users/bbarrows/pin-3.15/extras/crt/include/kernel/uapi/asm-x86 -I$HOME/pin-3.15/extras/components/include -I$HOME/pin-3.15/extras/xed-intel64/include/xed -I$HOME/pin-3.15/source/tools/Utils -I$HOME/pin-3.15/source/tools/InstLib -O3 -fomit-frame-pointer -fno-strict-aliasing -Wno-c++11-extensions   -c -o ImageManager.o ../common/ImageManager.cpp
+	c++ -Wall -Werror -Wno-unknown-pragmas -D__PIN__=1 -DPIN_CRT=1 -fno-stack-protector -fno-exceptions -funwind-tables -fno-rtti -Wtypedef-redefinition -DTARGET_IA32E -DHOST_IA32E -fPIC -DTARGET_MAC -D__DARWIN_ONLY_UNIX_CONFORMANCE=1 -D__DARWIN_UNIX03=0  -I $HOME/pin-3.15/source/include/pin/  -I$HOME/pin-3.15/source/include/pin -I$HOME/pin-3.15/source/include/pin/gen -isystem /Users/bbarrows/pin-3.15/extras/stlport/include -isystem /Users/bbarrows/pin-3.15/extras/libstdc++/include -isystem /Users/bbarrows/pin-3.15/extras/crt/include -isystem /Users/bbarrows/pin-3.15/extras/crt/include/arch-x86_64 -isystem /Users/bbarrows/pin-3.15/extras/crt/include/kernel/uapi -isystem /Users/bbarrows/pin-3.15/extras/crt/include/kernel/uapi/asm-x86 -I$HOME/pin-3.15/extras/components/include -I$HOME/pin-3.15/extras/xed-intel64/include/xed -I$HOME/pin-3.15/source/tools/Utils -I$HOME/pin-3.15/source/tools/InstLib -O3 -fomit-frame-pointer -fno-strict-aliasing -std=c++11 -Wno-format -Wno-c++11-extensions  -I../common/ -dynamiclib -L$HOME/pin-3.15/intel64/lib -L$HOME/pin-3.15/extras/xed-intel64/lib   -L$HOME/pin-3.15/intel64/runtime/pincrt  -L$HOME/pin-3.15/intel64/lib-ext -lpin -lxed -lpin3dwarf -nostdlib -lstlport-dynamic -lm-dynamic -lc-dynamic -lunwind-dynamic -o CodeCoverage.dylib ImageManager.o CodeCoverage.cpp

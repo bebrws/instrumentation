@@ -11,6 +11,8 @@
 #include <unordered_set>
 #include <unordered_map>
 
+using namespace std;
+
 #include "pin.H"
 #include "TraceFile.h"
 #include "ImageManager.h"
@@ -259,7 +261,7 @@ static VOID OnFini(INT32 code, VOID* v)
     // List the frequencies.
     cout << "Per loaded image basic block hit count:" << endl;
     for (const auto& kv : frequency) {
-        printf("%10u - %s\n", kv.second, kv.first.c_str());
+        printf("%llu - %s\n", kv.second, kv.first.c_str());
     }
 }
 
